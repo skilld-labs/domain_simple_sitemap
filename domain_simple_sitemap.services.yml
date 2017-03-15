@@ -1,0 +1,50 @@
+services:
+  domain_simple_sitemap.route_subscriber:
+    class: Drupal\domain_simple_sitemap\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  domain_simple_sitemap.generator:
+    class: Drupal\domain_simple_sitemap\DomainSimpleSitemap
+    public: true
+    decorates: simple_sitemap.generator
+    decoration_priority: 1
+    arguments:
+      - '@domain_simple_sitemap.sitemap_generator'
+      - '@config.factory'
+      - '@database'
+      - '@entity.query'
+      - '@entity_type.manager'
+      - '@path.validator'
+      - '@date.formatter'
+
+  domain_simple_sitemap.sitemap_generator:
+    class: Drupal\domain_simple_sitemap\DomainSimpleSitemapGenerator
+    public: true
+    decorates: simple_sitemap.sitemap_generator
+    decoration_priority: 1
+    arguments:
+      - '@simple_sitemap.batch'
+      - '@database'
+      - '@module_handler'
+      - '@language_manager'
+
+  domain_simple_sitemap.batch:
+      class: Drupal\domain_simple_sitemap\Batch\Batch
+      public: false
+      decorates: simple_sitemap.batch
+      decoration_priority: 1
+
+  domain_simple_sitemap.batch_url_generator:
+    class: Drupal\domain_simple_sitemap\Batch\BatchUrlGenerator
+    public: true
+    decorates: simple_sitemap.batch_url_generator
+    decoration_priority: 1
+    arguments:
+      - '@domain_simple_sitemap.generator'
+      - '@domain_simple_sitemap.sitemap_generator'
+      - '@language_manager'
+      - '@entity_type.manager'
+      - '@path.validator'
+      - '@entity.query'
+      - '@simple_sitemap.logger'
