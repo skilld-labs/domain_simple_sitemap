@@ -8,9 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\domain\DomainNegotiator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\simple_sitemap\Simplesitemap;
 
 /**
  * Class SimplesitemapController.
@@ -29,25 +27,25 @@ class DomainSimpleSitemapController extends ControllerBase {
   /**
    * The domain negotiator.
    *
-   * @var DomainNegotiator
+   * @var \Drupal\domain\DomainNegotiator
    */
   protected $domainNegotiator;
 
   /**
    * Database Connection.
    *
-   * @var Connection $db
+   * @var \Drupal\Core\Database\Connection
    */
   protected $db;
 
   /**
-   * SimplesitemapController constructor.
+   * DomainSimpleSitemapController constructor.
    *
-   * @param DomainSimpleSitemap $generator
+   * @param \Drupal\domain_simple_sitemap\DomainSimpleSitemap $generator
    *   The sitemap generator.
-   * @param DomainNegotiator $domainNegotiator
+   * @param \Drupal\domain\DomainNegotiator $domainNegotiator
    *   The Domain Negotiator.
-   * @param Connection $db
+   * @param \Drupal\Core\Database\Connection $db
    *   The Database Connection.
    */
   public function __construct(DomainSimpleSitemap $generator, DomainNegotiator $domainNegotiator, Connection $db) {
@@ -57,7 +55,7 @@ class DomainSimpleSitemapController extends ControllerBase {
   }
 
   /**
-   * Returns the whole sitemap, a requested sitemap chunk, or the sitemap index file.
+   * Returns the whole sitemap, requested sitemap chunk or sitemap index file.
    *
    * @param int $chunk_id
    *   Optional ID of the sitemap chunk. If none provided, the first chunk or

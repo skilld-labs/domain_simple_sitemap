@@ -4,13 +4,10 @@ namespace Drupal\domain_simple_sitemap\Batch;
 
 use Drupal\domain_simple_sitemap\DomainSimpleSitemap;
 use Drupal\domain_simple_sitemap\DomainSimpleSitemapGenerator;
-use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\domain\Entity\Domain;
-use Drupal\language\ConfigurableLanguageManagerInterface;
 use Drupal\simple_sitemap\Logger;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -28,23 +25,37 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   use StringTranslationTrait;
 
   const ANONYMOUS_USER_ID = 0;
+
   const PATH_DOES_NOT_EXIST_OR_NO_ACCESS_MESSAGE = "The path @path has been omitted from the XML sitemap as it either does not exist, or it is not accessible to anonymous users.";
+
   const PROCESSING_PATH_MESSAGE = 'Processing path #@current out of @max: @path';
+
   const REGENERATION_FINISHED_MESSAGE = "The <a href='@url' target='_blank'>XML sitemap</a> has been regenerated for all languages.";
+
   const REGENERATION_FINISHED_ERROR_MESSAGE = 'The sitemap generation finished with an error.';
 
   protected $generator;
+
   protected $sitemapGenerator;
+
   protected $languageManager;
+
   protected $languages;
+
   protected $defaultLanguageId;
+
   protected $entityTypeManager;
+
   protected $pathValidator;
+
   protected $entityQuery;
+
   protected $logger;
+
   protected $anonUser;
 
   protected $context;
+
   protected $batchInfo;
 
   /**
@@ -74,13 +85,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   }
 
   /**
-   * Get Batch Iteration Entities.
-   *
-   * @param array $entity_info
-   *   Entity info array.
-   *
-   * @return mixed
-   *   Mixed value.
+   * {@inheritdoc}
    */
   protected function getBatchIterationEntities($entity_info) {
     $query = $this->entityQuery->get($entity_info['entity_type_name']);
@@ -116,14 +121,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   }
 
   /**
-   * Add URL variants.
-   *
-   * @param array $url_object
-   *   Url object.
-   * @param array $path_data
-   *   Path data.
-   * @param array $entity
-   *   Entity.
+   * {@inheritdoc}
    */
   protected function addUrlVariants($url_object, $path_data, $entity) {
     $alternate_urls = [];
@@ -169,21 +167,15 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
 
     foreach ($alternate_urls as $langcode => $url) {
       $this->context['results']['generate'][] = $path_data + [
-          'langcode' => $langcode,
-          'url' => $url,
-          'alternate_urls' => $alternate_urls
-        ];
+        'langcode' => $langcode,
+        'url' => $url,
+        'alternate_urls' => $alternate_urls,
+      ];
     }
   }
 
   /**
-   * Get Batch Iteration Custom Paths.
-   *
-   * @param array $custom_paths
-   *   Custom paths.
-   *
-   * @return mixed
-   *   Mixed value.
+   * {@inheritdoc}
    */
   protected function getBatchIterationCustomPaths(array $custom_paths) {
 
@@ -241,7 +233,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
         'entity_info' => ['entity_type' => $entity_info['entity_type_name'], 'id' => $entity_id],
         'lastmod' => method_exists($entity, 'getChangedTime') ? date_iso8601($entity->getChangedTime()) : NULL,
         'priority' => $entity_settings['priority'],
-        'domain_id' => $entity_info['domain_id']
+        'domain_id' => $entity_info['domain_id'],
       ];
       $this->addUrlVariants($url_object, $path_data, $entity);
     }
@@ -262,7 +254,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
     foreach ($custom_paths as $i => $custom_path) {
       $this->setCurrentId($i);
 
-      // todo: Change to different function, as this also checks if current user has access. The user however varies depending if process was started from the web interface or via cron/drush. Use getUrlIfValidWithoutAccessCheck()?
+      /* @todo: Change to different function, as this also checks if current user has access. The user however varies depending if process was started from the web interface or via cron/drush. Use getUrlIfValidWithoutAccessCheck()? */
       if (!$this->pathValidator->isValid($custom_path['path'])) {
         $this->logger->m(self::PATH_DOES_NOT_EXIST_OR_NO_ACCESS_MESSAGE, ['@path' => $custom_path['path']])
           ->display('warning', 'administer sitemap settings')
@@ -290,16 +282,11 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   }
 
   /**
-   * Get Entity From Url Object.
-   *
-   * @param array $url_object
-   *   URL object.
-   *
-   * @return object|null
-   *   Mixed value.
+   * {@inheritdoc}
    */
   protected function getEntityFromUrlObject($url_object) {
     $route_parameters = $url_object->getRouteParameters();
+
     return !empty($route_parameters) && $this->entityTypeManager
       ->getDefinition($entity_type_id = key($route_parameters), FALSE)
       ? $this->entityTypeManager->getStorage($entity_type_id)

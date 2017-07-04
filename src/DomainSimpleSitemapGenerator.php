@@ -6,7 +6,7 @@ use Drupal\domain\Entity\Domain;
 use Drupal\simple_sitemap\EntityHelper;
 use Drupal\simple_sitemap\Simplesitemap;
 use Drupal\simple_sitemap\SitemapGenerator;
-use \XMLWriter;
+use XMLWriter;
 use Drupal\domain_simple_sitemap\Batch\Batch;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Extension\ModuleHandler;
@@ -20,41 +20,57 @@ use Drupal\Core\Language\LanguageManagerInterface;
 class DomainSimpleSitemapGenerator extends SitemapGenerator {
 
   /**
+   * Batch.
+   *
    * @var \Drupal\simple_sitemap\Batch\Batch
    */
   protected $batch;
 
   /**
+   * Entity helper.
+   *
    * @var \Drupal\simple_sitemap\EntityHelper
    */
   protected $entityHelper;
 
   /**
+   * Database connection.
+   *
    * @var \Drupal\Core\Database\Connection
    */
   protected $db;
 
   /**
+   * Language manager interface.
+   *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;
 
   /**
+   * Module handler.
+   *
    * @var \Drupal\Core\Extension\ModuleHandler
    */
   protected $moduleHandler;
 
   /**
+   * Form name.
+   *
    * @var string
    */
   protected $generateFrom = 'form';
 
   /**
+   * If href lang exist.
+   *
    * @var bool
    */
   protected $isHreflangSitemap;
 
   /**
+   * Simplesitemp class.
+   *
    * @var \Drupal\simple_sitemap\Simplesitemap
    */
   protected $generator;
@@ -132,8 +148,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
   }
 
   /**
-   * Wrapper method which takes links along with their options, lets other
-   * modules alter the links and then generates and saves the sitemap.
+   * Wrapper to takes links along with their options.
    *
    * @param array $links
    *   All links with their multilingual versions and settings.
@@ -142,7 +157,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
    * @param string $domain_id
    *   Domain ID.
    */
-  public function generateDomainSitemap($links, $remove_sitemap = FALSE, $domain_id = NULL) {
+  public function generateDomainSitemap(array $links, $remove_sitemap = FALSE, $domain_id = NULL) {
     // Invoke alter hook.
     $this->moduleHandler->alter('simple_sitemap_links', $links);
     $values = [
@@ -272,13 +287,14 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
 
   /**
    * Returns a batch-ready data array for custom link generation.
-   * @see: \Drupal\simple_sitemap\SitemapGenerator::getCustomUrlsData
    *
    * @param string $domain_id
    *   Domain ID.
    *
    * @return array
    *   Data to be processed.
+   *
+   * @see: \Drupal\simple_sitemap\SitemapGenerator::getCustomUrlsData.
    */
   protected function getDomainCustomUrlsData($domain_id) {
     $paths = [];
@@ -293,8 +309,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
   }
 
   /**
-   * Collects entity metadata for entities that are set to be indexed and
-   * returns an array of batch-ready data sets for entity link generation.
+   * Collects entity data that are set to be indexed and returns an array.
    *
    * @return array
    *   Array of entity data.
@@ -306,8 +321,8 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
     foreach ($entity_types as $entity_type_name => $bundles) {
       if (isset($sitemap_entity_types[$entity_type_name])) {
         $keys = $sitemap_entity_types[$entity_type_name]->getKeys();
-        // Menu fix.
 
+        // Menu fix.
         $keys['bundle'] = $entity_type_name == 'menu_link_content' ? 'menu_name' : $keys['bundle'];
         foreach ($bundles as $bundle_name => $bundle_settings) {
           if ($bundle_settings['index']) {

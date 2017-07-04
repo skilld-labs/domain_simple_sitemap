@@ -12,12 +12,12 @@ use Drupal\Core\Database\Database;
  */
 function domain_simple_sitemap_install() {
   // Create new field domain_id in simple_sitemap table.
-  $spec = array(
+  $spec = [
     'type' => 'varchar',
     'description' => "Domain ID",
     'length' => 100,
     'not null' => FALSE,
-  );
+  ];
   $schema = Database::getConnection()->schema();
   $schema->addField('simple_sitemap', 'domain_id', $spec);
 

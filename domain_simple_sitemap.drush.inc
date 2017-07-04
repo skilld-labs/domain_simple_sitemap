@@ -29,6 +29,6 @@ function drush_domain_simple_sitemap_generate() {
   Database::getConnection()->truncate('simple_sitemap')->execute();
   $domains = \Drupal::service('domain.loader')->loadMultiple();
   foreach ($domains as $domain_id => $domain) {
-    \Drupal::service('domain_simple_sitemap.sitemap_generator')->generateDomainSitemap(array(), FALSE, $domain_id);
+    \Drupal::service('domain_simple_sitemap.sitemap_generator')->generateDomainSitemap([], FALSE, $domain_id);
   }
 }
