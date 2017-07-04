@@ -11,6 +11,7 @@ services:
     decoration_priority: 1
     arguments:
       - '@domain_simple_sitemap.sitemap_generator'
+      - '@simple_sitemap.entity_helper'
       - '@config.factory'
       - '@database'
       - '@entity.query'
@@ -25,6 +26,7 @@ services:
     decoration_priority: 1
     arguments:
       - '@simple_sitemap.batch'
+      - '@simple_sitemap.entity_helper'
       - '@database'
       - '@module_handler'
       - '@language_manager'

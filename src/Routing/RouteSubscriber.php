@@ -17,16 +17,16 @@ class RouteSubscriber extends RouteSubscriberBase {
   public function alterRoutes(RouteCollection $collection) {
     // Change controller class and method for simple sitemap.
     if ($route = $collection->get('simple_sitemap.sitemap')) {
-      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\AprolisDomainAccessSitemapController::getSitemap']);
+      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\DomainSimpleSitemapController::getSitemap']);
     }
     if ($route = $collection->get('simple_sitemap.sitemaps')) {
-      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\AprolisDomainAccessSitemapController::getSitemap']);
+      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\DomainSimpleSitemapController::getSitemap']);
     }
     if ($route = $collection->get('simple_sitemap.chunk_fallback')) {
-      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\AprolisDomainAccessSitemapController::getSitemap']);
+      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\DomainSimpleSitemapController::getSitemap']);
     }
     if ($route = $collection->get('simple_sitemap.chunk')) {
-      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\AprolisDomainAccessSitemapController::getSitemap']);
+      $route->addDefaults(['_controller' => '\Drupal\domain_simple_sitemap\Controller\DomainSimpleSitemapController::getSitemap']);
     }
   }
 

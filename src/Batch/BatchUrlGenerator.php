@@ -82,7 +82,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
    * @return mixed
    *   Mixed value.
    */
-  private function getBatchIterationEntities($entity_info) {
+  protected function getBatchIterationEntities($entity_info) {
     $query = $this->entityQuery->get($entity_info['entity_type_name']);
 
     if (!empty($entity_info['keys']['id'])) {
@@ -125,7 +125,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
    * @param array $entity
    *   Entity.
    */
-  private function addUrlVariants($url_object, $path_data, $entity) {
+  protected function addUrlVariants($url_object, $path_data, $entity) {
     $alternate_urls = [];
     $url_object->setOption('base_url', Domain::load($path_data['domain_id'])
       ->getRawPath());
@@ -185,7 +185,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
    * @return mixed
    *   Mixed value.
    */
-  private function getBatchIterationCustomPaths($custom_paths) {
+  protected function getBatchIterationCustomPaths(array $custom_paths) {
 
     if ($this->needsInitialization()) {
       $this->initializeBatch(count($custom_paths));
@@ -201,7 +201,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   /**
    * {@inheritdoc}
    */
-  public function generateBundleUrls($entity_info) {
+  public function generateBundleUrls(array $entity_info) {
 
     foreach ($this->getBatchIterationEntities($entity_info) as $entity_id => $entity) {
 
@@ -251,7 +251,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
   /**
    * {@inheritdoc}
    */
-  public function generateCustomUrls($custom_paths) {
+  public function generateCustomUrls(array $custom_paths) {
 
     $custom_paths = $this->getBatchIterationCustomPaths($custom_paths);
 
@@ -298,7 +298,7 @@ class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
    * @return object|null
    *   Mixed value.
    */
-  private function getEntityFromUrlObject($url_object) {
+  protected function getEntityFromUrlObject($url_object) {
     $route_parameters = $url_object->getRouteParameters();
     return !empty($route_parameters) && $this->entityTypeManager
       ->getDefinition($entity_type_id = key($route_parameters), FALSE)
