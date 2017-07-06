@@ -3,3 +3,7 @@ type: module
 description: Module for generating sitemaps on domains with Domain Access module.
 core: 8.x
 package: SEO
+dependencies:
+  - drupal:simple_sitemap
+  - drupal:domain
+  - drupal:domain_access
