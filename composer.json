@@ -16,7 +16,7 @@
     { "name": "Ruben Egiguren a.k.a keopx", "email": "keopx@keopx.net" }
   ],
   "require": {
-    "drupal/simple_sitemap":  "^2.9.0",
-    "drupal/domain":  "^1.0"
+    "drupal/simple_sitemap":  "*",
+    "drupal/domain":  "*"
   }
 }
