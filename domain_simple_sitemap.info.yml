@@ -4,5 +4,5 @@ description: Module for generating sitemaps on domains with Domain Access module
 core: 8.x
 package: Aprolis
 dependencies:
-  - simple_sitemap
-  - domain_access
+  - drupal:simple_sitemap
+  - drupal:domain_access

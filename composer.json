@@ -5,7 +5,6 @@
   "keywords": ["Drupal", "SEO", "Utility"],
   "license": "GPL-2.0+",
   "homepage": "https://www.drupal.org/project/domain_simple_sitemap",
-  "minimum-stability": "dev",
   "support": {
     "issues": "https://www.drupal.org/project/issues/domain_simple_sitemap",
     "source": "http://cgit.drupalcode.org/domain_simple_sitemap"
