@@ -17,6 +17,6 @@
   ],
   "require": {
     "drupal/simple_sitemap":  "^2.9.0",
-    "drupal/domain":  "^8.x-1.0"
+    "drupal/domain":  "^1.0"
   }
 }
