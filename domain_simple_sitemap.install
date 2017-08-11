@@ -23,7 +23,6 @@ function domain_simple_sitemap_install() {
 
   // Add sitemaps.
   Database::getConnection()->truncate('simple_sitemap')->execute();
-  \Drupal::service('domain_simple_sitemap.generator')->generateSitemap('nobatch');
 }
 
 /**
