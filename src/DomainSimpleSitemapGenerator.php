@@ -99,6 +99,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
    */
   public function setGenerator(Simplesitemap $generator) {
     $this->generator = $generator;
+
     return $this;
   }
 
@@ -107,6 +108,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
    */
   public function setGenerateFrom($from) {
     $this->generateFrom = $from;
+
     return $this;
   }
 
@@ -115,8 +117,17 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
    */
   public function generateSitemap(array $links, $remove_sitemap = FALSE) {
     $new_links_array = [];
+
+    // Remove existing sitemaps.
+    if ($remove_sitemap) {
+      $this->db->truncate('simple_sitemap')->execute();
+    }
+
     foreach ($links as $link) {
+      // Fetch sitemap chunk id for the domain.
       $chunk_id = $this->db->query('SELECT id FROM {simple_sitemap} WHERE domain_id = :domain_id', [':domain_id' => $link['domain_id']])->fetchField();
+
+      // Create new chunk if not existing.
       if (!$chunk_id) {
         $chunk_id = $this->db->query('SELECT MAX(id) FROM   {simple_sitemap}')->fetchField() + 1;
         $values = [
@@ -128,22 +139,26 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
 
         $this->db->insert('simple_sitemap')->fields($values)->execute();
       }
+
+      // Append in new links array.
       $new_links_array[$chunk_id][$link['domain_id']][] = $link;
     }
+
     // Invoke alter hook.
     $this->moduleHandler->alter('simple_sitemap_links', $links);
-    if ($remove_sitemap) {
-      $this->db->truncate('simple_sitemap')->execute();
-    }
+
     foreach ($new_links_array as $id => $new_links) {
       $values = [
-        'id' => $id,
         'domain_id' => key($new_links),
         'sitemap_string' => $this->generateSitemapChunk(array_shift($new_links)),
         'sitemap_created' => REQUEST_TIME,
       ];
 
-      $this->db->insert('simple_sitemap')->fields($values)->execute();
+      // Update the sitemap chink for the domain.
+      $this->db->update('simple_sitemap')
+        ->fields($values)
+        ->condition('id', $id)
+        ->execute();
     }
   }
 
@@ -194,6 +209,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
     }
     $writer->endElement();
     $writer->endDocument();
+
     return $writer->outputMemory();
   }
 
@@ -253,6 +269,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
     }
     $writer->endElement();
     $writer->endDocument();
+
     return $writer->outputMemory();
   }
 
@@ -305,6 +322,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
       $paths[$i]['lastmod'] = NULL;
       $paths[$i]['domain_id'] = $domain_id;
     }
+
     return $paths;
   }
 
@@ -336,6 +354,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
         }
       }
     }
+
     return $data_sets;
   }
 
