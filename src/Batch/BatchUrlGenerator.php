@@ -22,8 +22,6 @@ use Drupal\simple_sitemap\Batch\BatchUrlGenerator as SimpleSitemapBatchUrlGenera
  */
 class BatchUrlGenerator extends SimpleSitemapBatchUrlGenerator {
 
-  use StringTranslationTrait;
-
   const ANONYMOUS_USER_ID = 0;
 
   const PATH_DOES_NOT_EXIST_OR_NO_ACCESS_MESSAGE = "The path @path has been omitted from the XML sitemap as it either does not exist, or it is not accessible to anonymous users.";
