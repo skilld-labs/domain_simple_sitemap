@@ -290,12 +290,12 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
     foreach ($domains as $domain_id => $domain) {
       if ($domain->status()) {
         // Add custom link generating operation.
-        $this->batch->addOperation('generateCustomUrls', $this->getDomainCustomUrlsData($domain_id));
+        $this->batch->addOperation('domain_simple_sitemap.custom_url_generator', $this->getDomainCustomUrlsData($domain_id));
 
         // Add entity link generating operations.
         foreach ($this->getEntityTypeData() as $data) {
           $data['domain_id'] = $domain_id;
-          $this->batch->addOperation('generateBundleUrls', $data);
+          $this->batch->addOperation('domain_simple_sitemap.entity_url_generator', $data);
         }
       }
     }
@@ -334,7 +334,7 @@ class DomainSimpleSitemapGenerator extends SitemapGenerator {
    */
   protected function getEntityTypeData() {
     $data_sets = [];
-    $sitemap_entity_types = $this->entityHelper->getSitemapEntityTypes();
+    $sitemap_entity_types = $this->entityHelper->getSupportedEntityTypes();
     $entity_types = $this->generator->getBundleSettings();
     foreach ($entity_types as $entity_type_name => $bundles) {
       if (isset($sitemap_entity_types[$entity_type_name])) {

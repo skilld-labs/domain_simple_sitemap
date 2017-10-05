@@ -47,13 +47,6 @@ class DomainSimpleSitemap extends Simplesitemap {
   protected $db;
 
   /**
-   * Query factory.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-  /**
    * Entity manager interface.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -88,8 +81,6 @@ class DomainSimpleSitemap extends Simplesitemap {
    *   Config factory.
    * @param \Drupal\Core\Database\Connection $database
    *   Database connection.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entityQuery
-   *   Entity query.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
    * @param \Drupal\Core\Path\PathValidator $pathValidator
@@ -102,17 +93,15 @@ class DomainSimpleSitemap extends Simplesitemap {
     EntityHelper $entityHelper,
     ConfigFactory $configFactory,
     Connection $database,
-    QueryFactory $entityQuery,
     EntityTypeManagerInterface $entityTypeManager,
     PathValidator $pathValidator,
     DateFormatter $dateFormatter
   ) {
-    parent::__construct($sitemapGenerator, $entityHelper, $configFactory, $database, $entityQuery, $entityTypeManager, $pathValidator, $dateFormatter);
+    parent::__construct($sitemapGenerator, $entityHelper, $configFactory, $database, $entityTypeManager, $pathValidator, $dateFormatter);
     $this->sitemapGenerator = $sitemapGenerator;
     $this->entityHelper = $entityHelper;
     $this->configFactory = $configFactory;
     $this->db = $database;
-    $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
     $this->pathValidator = $pathValidator;
     $this->dateFormatter = $dateFormatter;
